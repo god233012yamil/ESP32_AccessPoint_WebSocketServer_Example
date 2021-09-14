@@ -5,9 +5,6 @@
 #include <WiFi.h>
 
 // Include file to support Websockets.
-// Arduino Websockets is a library for writing modern WebSockets applications with Arduino.
-// by Gil Mainmon
-// url: https://github.com/Links2004/arduinoWebSockets
 #include <WebSocketsServer.h>
 
 // Global variable declaration and initialization.
@@ -17,7 +14,8 @@ const char *password = "Password";
 IPAddress ip = {0, 0, 0, 0};
 
 // This function will be called when a WiFi event takes place.
-void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info){  
+void WiFiEvent(WiFiEvent_t event, WiFiEventInfo_t info) { 
+
     switch(event) {
         case SYSTEM_EVENT_AP_START:
             // Get the Access Point IP address.
@@ -67,7 +65,7 @@ void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t leng
       //  
       case WStype_DISCONNECTED:
         ip = webSocket.remoteIP(num);
-        Serial.printf("Socket Client %u with ip %d.%d.%d.%d has disconnected\r\n", num, ip[0], ip[1], ip[2], ip[3]);
+        Serial.printf("Socket Client %u has disconnected\r\n", num);
         break;
       //  
       case WStype_ERROR:
@@ -76,45 +74,18 @@ void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t leng
       //
       default:
         Serial.println("WebSocket Unknown Event!");
-        break;     
-
+        break;
     }
-    
-    //
-    /*if (type == WStype_TEXT) {
-      // Echoes what we received via default UART.
-      Serial.printf("Websocket received: %s", payload); 
-      
-   //   
-   } else if (type == WStype_CONNECTED) {
-      ip = webSocket.remoteIP(num);        
-      Serial.printf("Socket Client %u with ip %d.%d.%d.%d has connected\r\n", num, ip[0], ip[1], ip[2], ip[3]);
-   
-   //   
-   } else if (type == WStype_DISCONNECTED) {
-      ip = webSocket.remoteIP(num);
-      Serial.printf("Socket Client %u with ip %d.%d.%d.%d has disconnected\r\n", num, ip[0], ip[1], ip[2], ip[3]);
-   
-   //   
-   } else if (type == WStype_ERROR) {
-      Serial.println("WebSocket Error!");  
-   
-   } else {
-      //nothing to do
-   }*/
 
 }
 
 //
-void setup() {  
-  // Init LED and turn off
-  //pinMode(led_pin, OUTPUT);
-  //digitalWrite(led_pin, LOW);
+void setup() {
   
   // Start Serial (UART0).
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Configuring The Access Point..."); 
+  Serial.println("Configuring The Access Point."); 
 
   // Setup a callback for WiFi.
   WiFi.onEvent(WiFiEvent);
